@@ -5,8 +5,8 @@ window.onload = function() {
         alert('Please install MetaMask!')
     }
 
-    var dtokenAddress = '0x339ffc0aa89419e45e50679f8b6c04164be2ba47';
-    var etokenAddress = '0xe9694b8fa7bd9f7189f95c34c0f6ee5d0df80d89';
+    var dtokenAddress = '0x6a9f822a5bcbd5a28ce55847365d58afdba515f8';
+    var etokenAddress = '0xed9b30178f0eb74456947e835e2796f03e241b3c';
     var dtokenABI = getDrinkTokenABI();
     var etokenABI = getEntranceTokenABI();
 
