@@ -1,8 +1,12 @@
 pragma solidity ^0.4.24;
 
+import "zeppelin-solidity/contracts/math/SafeMath.sol";
+import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol";
 
-contract EntranceToken is ERC721Token {
+contract EntranceToken is ERC721Token, Ownable {
+  using SafeMath for uint256;
+
   string public name = "EntranceToken";
   string public symbol = "ENTK";
 
@@ -12,8 +16,10 @@ contract EntranceToken is ERC721Token {
     uint256 price;
   }
 
-  mapping(uint256 => Token) stocks;
-  mapping(uint256 => uint256) stockRemainings;
+  Token[] stocks;
+  uint256[] stockRemainings;
+
+  Token[] tokens;
 
   mapping(uint256 => Token) tokens;
 
@@ -29,11 +35,27 @@ contract EntranceToken is ERC721Token {
     uint256 amountOfDrinkToken,
     uint256 price,
     uint256 amount) public onlyOwner {
-    // TODO impl
+
+    require(entranceAt != "");
+    require(amountOfDrinkToken >= 0);
+    require(price >= 0);
+    require(amount > 0);
+
+    Token memory stock = Token(entranceAt, amountOfDrinkToken, price);
+    uint256 stockId = stocks.push(stock) - 1;
+    stockRemainings.push(amount);
   }
 
-  function buyToken(uint256 stockId) external payable returns (uint256) {
-    // TODO impl
+  function buyToken(uint256 stockId) external payable returns (uint256 tokenId) {
+    uint256 remainings = stockremainings[stockId];
+    require(remainings > 0);
+
+    Stock memory token = stocks[stockId];
+    require(msg.value >= token.price);
+
+    tokenId = tokens.push(token) - 1;
+
+    super._mint(msg.sender, tokenId);
   }
 
   function useToken(uint256 tokenId) public {
